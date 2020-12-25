@@ -17,7 +17,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
         with:
-          source: "."
+          source: "src,Dockerfile,docker-compose.yml,package.json,yarn.lock,tsconfig.json"
           target: ${{ secrets.WORK_DIR }}
 
       - name: Executing remote command
