@@ -9,6 +9,6 @@ build
 .vim
 .logs
 .env
-*.prod.yml
+*.prod
 
 mongo
