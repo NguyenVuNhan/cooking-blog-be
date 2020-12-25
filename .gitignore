@@ -1,0 +1,14 @@
+node_modules
+package-lock.json
+*.log
+*.gz
+
+build
+
+.git
+.vim
+.logs
+.env
+*.prod.yml
+
+mongo
