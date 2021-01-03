@@ -17,7 +17,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
         with:
-          source: "src,Dockerfile,docker-compose.prod.yml,package.json,yarn.lock,tsconfig.json"
+          source: "Dockerfile"
           target: ${{ secrets.WORK_DIR }}
 
       - name: Executing remote command
@@ -27,4 +27,8 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
-          script: cd ${{ secrets.WORK_DIR }} && ls
+          script:
+            cd ${{ secrets.WORK_DIR }} && \
+            ls
+            # mv docker-compose.prod.yml docker-compose.yml && \
+            # docker-compose up -d

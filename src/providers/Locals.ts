@@ -22,7 +22,7 @@ class Locals {
       maxParameterLimit: process.env.APP_MAX_PARAMETER_LIMIT || "50mb",
 
       url: process.env.APP_URL || `http://localhost:${process.env.PORT}`,
-      port: process.env.PORT || 4040,
+      port: process.env.PORT || 5000,
       appSecret: process.env.APP_SECRET || "This is your responsibility!",
       mongooseUrl: process.env.MONGOOSE_URL,
 
@@ -30,6 +30,8 @@ class Locals {
       year: new Date().getFullYear(),
       description: process.env.APP_DESCRIPTION || "App description",
 
+      isCORSEnabled: process.env.CORS_ENABLED || true,
+      jwtExpiresIn: process.env.JWT_EXPIRES_IN || 3,
       apiPrefix: process.env.API_PREFIX || "api",
 
       logDays: process.env.LOG_DAYS || 10,
@@ -47,9 +49,9 @@ class Locals {
   /**
    * Injects your config to the app's locals
    */
-  public static init(_express: Application): Application {
-    _express.locals.app = this.config();
-    return _express;
+  public static init(express: Application): Application {
+    express.locals = { ...express.locals, ...this.config() };
+    return express;
   }
 }
 

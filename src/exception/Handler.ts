@@ -12,7 +12,9 @@ class Handler {
 
       Log.error(`Path '${req.originalUrl}' not found [IP: '${ip}']!`);
       return res.status(404).json({
-        error: "Page Not Found",
+        data: { error: "Not found" },
+        message: "Not found",
+        success: false,
       });
     });
 
@@ -31,7 +33,13 @@ class Handler {
     Log.error(err.stack);
 
     if (req.xhr) {
-      return res.status(500).send({ error: "Something went wrong!" });
+      return res.status(500).send({
+        data: {
+          error: "Something went wrong!",
+        },
+        message: "Something went wrong!",
+        success: false,
+      });
     } else {
       return next(err);
     }
