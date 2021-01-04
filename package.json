@@ -6,9 +6,10 @@
   "author": "Nhan Nguyen",
   "license": "MIT",
   "scripts": {
-    "start": "yarn run build && NODE_ENV=production node build/index.js",
-    "start:dev": "nodemon -x yarn start",
-    "build": "rimraf ./build && tsc",
+    "prestart": "yarn run build",
+    "start": "NODE_ENV=development node build/index.js",
+    "dev": "nodemon -x yarn start",
+    "build": "tsc",
     "lint": "eslint --ext ts src/",
     "lint:fix": "eslint --fix --ext ts src/",
     "prettier": "prettier --check \"src/**/(*.ts)\"",
@@ -29,7 +30,9 @@
     "kue": "^0.11.6",
     "mongoose": "^5.11.4",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "swagger-jsdoc": "^6.0.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@types/bcrypt-nodejs": "^0.0.31",
@@ -41,6 +44,8 @@
     "@types/kue": "^0.11.13",
     "@types/passport": "^1.0.4",
     "@types/passport-jwt": "^3.0.3",
+    "@types/swagger-jsdoc": "^3.0.2",
+    "@types/swagger-ui-express": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
     "eslint": "^7.14.0",

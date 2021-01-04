@@ -7,6 +7,8 @@ class AddRecipe {
       // Validation
       validationResult(req).throw();
 
+      const { name, course, ingredients, duration, steps } = req.body;
+
       res.status(200).json({
         data: {},
         message: "Can not found any user with this email",

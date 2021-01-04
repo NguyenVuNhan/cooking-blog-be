@@ -3,6 +3,7 @@ import Locals from "../providers/Locals";
 import CORS from "./CORS";
 
 import Http from "./Http";
+import Swagger from "./Swagger";
 
 class Kernel {
   public static init(express: Application): Application {
@@ -14,6 +15,9 @@ class Kernel {
 
     // Mount basic express apis middleware
     express = Http.mount(express);
+
+    // Mount basic document middleware
+    express = Swagger.mount(express);
 
     return express;
   }
