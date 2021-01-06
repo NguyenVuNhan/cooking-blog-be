@@ -1,9 +1,11 @@
-import { body, validationResult } from "express-validator";
-import { IReq, IRes } from "../../../@types/vendors";
+import { NextFunction, Request, Response } from "express";
+import { body } from "express-validator";
+import ApplicationError from "../../../exception/ApplicationError";
+import Handler from "../../../exception/Handler";
 import User from "../../../models/User";
 
 class Register {
-  static validators = [
+  static perform = [
     body("email")
       .exists()
       .withMessage("Email cannot be empty")
@@ -26,13 +28,8 @@ class Register {
         }
         return true;
       }),
-  ];
-
-  static perform(req: IReq, res: IRes) {
-    try {
-      // Validation
-      validationResult(req).throw();
-
+    Handler.validatorHandler,
+    function (req: Request, res: Response, next: NextFunction): void {
       // Get POST data
       const { email, password } = req.body;
 
@@ -40,11 +37,7 @@ class Register {
       User.findOne({ email }).then((user) => {
         // User exist
         if (user) {
-          return res.status(400).json({
-            data: { email },
-            message: "Email already exists",
-            success: false,
-          });
+          return next(new ApplicationError("Email already exists"));
         }
 
         // User not exist
@@ -62,14 +55,8 @@ class Register {
           });
         });
       });
-    } catch (err) {
-      res.status(400).json({
-        data: { ...err },
-        message: "Error",
-        success: false,
-      });
-    }
-  }
+    },
+  ];
 }
 
 export default Register;

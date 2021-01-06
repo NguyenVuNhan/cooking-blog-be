@@ -17,5 +17,3 @@ export interface IUser {
   fullname: string;
   picture: string;
 }
-
-export default IUser;

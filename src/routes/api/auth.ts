@@ -31,7 +31,7 @@ const router = Router();
  *          '400':
  *            description: User did not login properly
  */
-router.post("/login", LoginController.validators, LoginController.perform);
+router.post("/login", LoginController.perform);
 
 /**
  * @swagger
@@ -62,11 +62,7 @@ router.post("/login", LoginController.validators, LoginController.perform);
  *          '400':
  *            description: User did not login properly
  */
-router.post(
-  "/register",
-  RegisterController.validators,
-  RegisterController.perform
-);
+router.post("/register", RegisterController.perform);
 
 /**
  * @swagger

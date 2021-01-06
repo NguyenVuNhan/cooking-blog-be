@@ -1,9 +1,9 @@
-import { IReq, IRes } from "../../../@types/vendors/express";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../../../models/User";
 
 class RefreshToken {
-  static getToken(req: IReq): string {
+  static getToken(req: Request): string {
     if (
       req.headers.authorization &&
       req.headers.authorization.split(" ")[0] === "Bearer"
@@ -16,7 +16,7 @@ class RefreshToken {
     return "";
   }
 
-  static perform(req: IReq, res: IRes) {
+  static perform(req: Request, res: Response) {
     try {
       const token = RefreshToken.getToken(req);
       if (token === "") {

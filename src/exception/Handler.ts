@@ -1,6 +1,8 @@
-import { Application } from "express";
-import { INext, IReq, IRes } from "../@types/vendors";
+import { is } from "bluebird";
+import { Application, NextFunction, Request, Response } from "express";
+import { validationResult } from "express-validator";
 import Log from "../middlewares/Log";
+import ApplicationError from "./ApplicationError";
 
 class Handler {
   /**
@@ -22,35 +24,61 @@ class Handler {
   }
 
   /**
+   * Handles validation results
+   */
+  static validatorHandler(req: Request, res: Response, next: NextFunction) {
+    try {
+      validationResult(req).throw();
+      next();
+    } catch (err) {
+      res.status(400).json({
+        data: { ...err },
+        message: "Error",
+        success: false,
+      });
+    }
+  }
+
+  /**
    * Handles your api/web routes errors/exception
    */
-  public static clientErrorHandler(
+  static clientErrorHandler(
     err: any,
-    req: IReq,
-    res: IRes,
-    next: INext
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): any {
-    Log.error(err.stack);
+    if (err instanceof ApplicationError) {
+      return res.status(err.code).json({
+        data: { error: err.toString() },
+        message: "Something went wrong!",
+        success: false,
+      });
+    }
 
     if (req.xhr) {
-      return res.status(500).send({
+      return res.status(500).json({
         data: {
           error: "Something went wrong!",
         },
         message: "Something went wrong!",
         success: false,
       });
-    } else {
-      return next(err);
     }
+
+    return next(err);
   }
 
   /**
-   * Register your error / exception monitoring
-   * tools right here ie. before "next(err)"!
+   * Register error / exception monitoring
    */
-  public static logErrors(err: any, _req: IReq, _res: IRes, next: INext): any {
-    Log.error(err.stack);
+  static logErrors(
+    err: any,
+    _req: Request,
+    _res: Response,
+    next: NextFunction
+  ): any {
+    Log.error(err.stack || err.message);
 
     return next(err);
   }

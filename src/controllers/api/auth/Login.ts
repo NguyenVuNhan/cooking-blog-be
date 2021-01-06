@@ -1,10 +1,12 @@
-import { body, validationResult } from "express-validator";
-import { IReq, IRes } from "../../../@types/vendors";
+import { NextFunction, Request, Response } from "express";
+import { body } from "express-validator";
 import jwt from "jsonwebtoken";
+import ApplicationError from "../../../exception/ApplicationError";
+import Handler from "../../../exception/Handler";
 import User from "../../../models/User";
 
 class Login {
-  static validators = [
+  static perform = [
     body("email")
       .exists()
       .withMessage("Email cannot be empty")
@@ -12,13 +14,8 @@ class Login {
       .isEmail()
       .withMessage("Email is invalid"),
     body("password").exists().withMessage("Password cannot be empty"),
-  ];
-
-  static perform(req: IReq, res: IRes): void {
-    try {
-      // Validation
-      validationResult(req).throw();
-
+    Handler.validatorHandler,
+    function (req: Request, res: Response, next: NextFunction): void {
       // Get POST data
       const { email, password } = req.body;
 
@@ -26,28 +23,27 @@ class Login {
       User.findOne({ email }).then((user) => {
         // User not exist
         if (!user) {
-          return res.status(400).json({
-            data: { email },
-            message: "Can not found any user with this email",
-            success: false,
-          });
+          return next(
+            new ApplicationError(
+              `Can not found any user associated with ${email}`
+            )
+          );
         }
 
         // If user exist
         user.comparePassword(password, (err, isMatch) => {
-          if (err) throw err;
-          if (!isMatch) throw Error("Password does not match");
+          if (err) return next(err);
+          if (!isMatch)
+            return next(new ApplicationError("Password does not match"));
 
           const payload = { id: user.id, email, password };
 
           jwt.sign(
             payload,
             req.app.locals.appSecret,
-            {
-              expiresIn: req.app.locals.jwtExpiresIn * 60,
-            },
+            { expiresIn: req.app.locals.jwtExpiresIn * 60 },
             (err, token) => {
-              if (err) throw err;
+              if (err) return next(err);
 
               // Hide sensitive data
               user.password = undefined;
@@ -62,14 +58,8 @@ class Login {
           );
         });
       });
-    } catch (err) {
-      res.status(400).json({
-        data: { ...err },
-        message: "Error",
-        success: false,
-      });
-    }
-  }
+    },
+  ];
 }
 
 export default Login;
