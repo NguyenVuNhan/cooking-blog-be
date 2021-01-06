@@ -1,7 +1,10 @@
-import { IIngredient } from "./ingredient";
-import IUser from "./user";
+import { IUser } from "./user";
 
-type IIngredientList = { ingredients: IIngredient; quantity: number }[];
+export interface IIngredientElem {
+  ingredient: string;
+  quantity: string;
+}
+export type IIngredientList = IIngredientElem[];
 
 export interface IStep {
   description: string;

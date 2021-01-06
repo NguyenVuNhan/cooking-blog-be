@@ -18,17 +18,12 @@ export const RecipeSchema = new mongoose.Schema(
         quantity: { type: String },
       },
     ],
-    duration: { type: String },
+    duration: { type: String, required: true },
     steps: [
       {
         description: { type: String, required: true },
         duration: { type: String },
-        ingredients: [
-          {
-            ingredient: { type: ObjectId, ref: "Ingredient" },
-            quantity: { type: String },
-          },
-        ],
+        ingredients: [String],
       },
     ],
   },
