@@ -11,4 +11,4 @@ RUN yarn install
 
 COPY . /app/server
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "run", "dev"]
