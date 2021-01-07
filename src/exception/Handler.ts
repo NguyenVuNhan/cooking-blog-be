@@ -78,7 +78,9 @@ class Handler {
     _res: Response,
     next: NextFunction
   ): any {
-    Log.error(err.stack || err.message);
+    if (!(err instanceof ApplicationError)) {
+      Log.error(err.stack || err.message);
+    }
 
     return next(err);
   }

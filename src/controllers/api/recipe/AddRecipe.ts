@@ -8,20 +8,12 @@ import Recipe from "../../../models/Recipe";
 
 class AddRecipe {
   static perform = [
-    body("title", "Recipe title cannot be empty").exists(),
-    body("ingredients")
-      .exists()
-      .withMessage("Ingredients cannot be empty")
-      .bail()
-      .isArray({ min: 1 })
-      .withMessage("At least one ingredient must be given"),
-    body("duration", "Duration cannot be empty").exists(),
-    body("steps")
-      .exists()
-      .withMessage("Steps cannot be empty")
-      .bail()
-      .isArray({ min: 1 })
-      .withMessage("At least one steps must be given"),
+    body("title", "Recipe title cannot be empty").isString(),
+    body("ingredients", "At least one ingredient must be given").isArray({
+      min: 1,
+    }),
+    body("duration", "Duration cannot be empty").isString(),
+    body("steps", "At least one steps must be given").isArray({ min: 1 }),
     Handler.validatorHandler,
     async function (
       req: Request<{}, {}, IRecipe>,

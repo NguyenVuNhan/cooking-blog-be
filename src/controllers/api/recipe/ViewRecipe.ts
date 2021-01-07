@@ -8,7 +8,7 @@ class ViewRecipe {
       req: Request<{ id?: string }>,
       res: Response,
       next: NextFunction
-    ): Promise<void> => {
+    ) => {
       const id = req.params.id;
 
       let recipes = null;
@@ -23,7 +23,7 @@ class ViewRecipe {
         return next(new ApplicationError("No recipe found", 404));
       }
 
-      res.status(200).json({
+      return res.status(200).json({
         data: { recipes },
         message: "List recipe",
         success: true,
