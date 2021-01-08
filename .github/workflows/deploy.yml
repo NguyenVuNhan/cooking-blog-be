@@ -27,7 +27,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
-          timeout-minutes: 20
+          command_timeout: 20m
           script: |
             cd ${{ secrets.WORK_DIR }}
             mv docker-compose.prod.yml docker-compose.yml
