@@ -21,6 +21,7 @@ jobs:
           target: ${{ secrets.WORK_DIR }}
 
       - name: Executing remote command
+        timeout-minutes: 15
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
