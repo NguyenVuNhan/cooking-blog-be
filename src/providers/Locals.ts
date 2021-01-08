@@ -19,7 +19,7 @@ class Locals {
       isTest: process.env.NODE_ENV === "test",
       isDevelopment: process.env.NODE_ENV === "development",
       maxUploadLimit: process.env.APP_MAX_UPLOAD_LIMIT || "50mb",
-      maxParameterLimit: process.env.APP_MAX_PARAMETER_LIMIT || "50mb",
+      maxParameterLimit: process.env.APP_MAX_PARAMETER_LIMIT || "5000",
 
       url: process.env.APP_URL || `http://localhost:${process.env.PORT}`,
       port: process.env.PORT || 5000,

@@ -3,17 +3,18 @@ version: "3.8"
 networks:
   cooking-blog:
     name: "cooking-blog-network"
-    external: true
+    # external: true
 
 services:
   server:
-    build: .
+    build:
+      context: .
+      dockerfile: ./Dockerfile.prod
     container_name: "cooking-blog-server"
     networks:
       - cooking-blog
     volumes:
-      - .:/app/server
-      - ./.logs:/app/server/.logs
+      - ./.logs:/home/node/app/.logs
     links:
       - redis
 
