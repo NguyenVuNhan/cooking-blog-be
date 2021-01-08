@@ -3,7 +3,7 @@ version: "3.8"
 networks:
   cooking-blog:
     name: "cooking-blog-network"
-    # external: true
+    external: true
 
 services:
   server:

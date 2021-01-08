@@ -29,9 +29,8 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
           script: |
             cd ${{ secrets.WORK_DIR }}
-            mv Dockerfile.prod Dockerfile
             mv docker-compose.prod.yml docker-compose.yml
             docker-compose down
             docker-compose build --no-cache
-            rm src
+            rm -rf src tsconfig.json
             docker-compose up -d
