@@ -15,8 +15,8 @@ class ViewRecipe {
       if (id) {
         recipes = await Recipe.findById(id).exec();
       } else {
-        // If id wasn't given, return all recipe of current user
-        recipes = await Recipe.find({ user: req.user });
+        // If id wasn't given, return all recipe
+        recipes = await Recipe.find();
       }
 
       if (!recipes) {

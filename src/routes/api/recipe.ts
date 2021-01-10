@@ -6,8 +6,10 @@ import UpdateRecipeController from "../../controllers/api/recipe/UpdateRecipe";
 import ViewRecipeController from "../../controllers/api/recipe/ViewRecipe";
 
 const router = Router();
+const privateRouter = Router();
+const publicRouter = Router();
 
-router.use(passport.authenticate("jwt", { session: false }));
+privateRouter.use(passport.authenticate("jwt", { session: false }));
 
 /**
  * @swagger
@@ -26,16 +28,14 @@ router.use(passport.authenticate("jwt", { session: false }));
  *      get:
  *        summary: Get all recipes
  *        description: Get all recipes of current user
- *        security:
- *          - BearerAuth: []
  *        responses:
  *          '200':
  *            description: OK
  *          '404':
  *            description: No recipe found
  */
-router.post("/", AddRecipeController.perform);
-router.get("/", ViewRecipeController.perform);
+privateRouter.post("/", AddRecipeController.perform);
+publicRouter.get("/", ViewRecipeController.perform);
 
 /**
  * @swagger
@@ -44,8 +44,6 @@ router.get("/", ViewRecipeController.perform);
  *      get:
  *        summary: Get recipe
  *        description: Get recipe by id
- *        security:
- *          - BearerAuth: []
  *        parameters:
  *          - in: path
  *            name: id
@@ -98,8 +96,11 @@ router.get("/", ViewRecipeController.perform);
  *          '404':
  *            description: No recipe found
  */
-router.get("/:id", ViewRecipeController.perform);
-router.post("/:id", UpdateRecipeController.perform);
-router.delete("/:id", DeleteRecipeController.perform);
+publicRouter.get("/:id", ViewRecipeController.perform);
+privateRouter.post("/:id", UpdateRecipeController.perform);
+privateRouter.delete("/:id", DeleteRecipeController.perform);
+
+router.use(publicRouter);
+router.use(privateRouter);
 
 export default router;
