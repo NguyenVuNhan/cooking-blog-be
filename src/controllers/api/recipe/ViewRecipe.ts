@@ -13,7 +13,15 @@ class ViewRecipe {
 
       let recipes = null;
       if (id) {
-        recipes = await Recipe.findById(id).exec();
+        recipes = await Recipe.findById(id)
+          .populate({
+            path: "ingredients",
+            populate: {
+              path: "ingredient",
+              select: "name",
+            },
+          })
+          .exec();
       } else {
         // If id wasn't given, return all recipe
         recipes = await Recipe.find();
