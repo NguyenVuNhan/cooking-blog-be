@@ -90,6 +90,7 @@ class UpdateRecipe {
 
       return res.status(200).json({
         data: {
+          id: newRecipe.id || recipe.id,
           title: newRecipe.title || recipe.title,
         },
         message: "Recipe successfully updated",

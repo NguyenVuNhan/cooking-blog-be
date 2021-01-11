@@ -56,7 +56,7 @@ class AddRecipe {
       }).save();
 
       res.status(200).json({
-        data: { ...newRecipe },
+        data: { id: newRecipe.id, title: newRecipe.title },
         message: "New recipe added",
         success: true,
       });

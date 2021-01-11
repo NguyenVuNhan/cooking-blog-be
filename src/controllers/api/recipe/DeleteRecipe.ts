@@ -33,6 +33,7 @@ class DeleteRecipe {
 
       return res.status(200).json({
         data: {
+          id: deletedRecipe.id,
           title: deletedRecipe.title,
         },
         message: "Recipe successfully deleted",
