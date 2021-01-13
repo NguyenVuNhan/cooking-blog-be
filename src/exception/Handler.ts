@@ -1,8 +1,13 @@
-import { is } from "bluebird";
 import { Application, NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import Log from "../middlewares/Log";
 import ApplicationError from "./ApplicationError";
+
+interface ErrorResponse {
+  msg: string;
+  param: string;
+  location?: string;
+}
 
 class Handler {
   /**
@@ -14,7 +19,15 @@ class Handler {
 
       Log.error(`Path '${req.originalUrl}' not found [IP: '${ip}']!`);
       return res.status(404).json({
-        data: { error: "Not found" },
+        data: {
+          errors: [
+            {
+              msg: "Not found",
+              param: "error",
+              location: req.originalUrl,
+            },
+          ],
+        },
         message: "Not found",
         success: false,
       });
@@ -27,16 +40,22 @@ class Handler {
    * Handles validation results
    */
   static validatorHandler(req: Request, res: Response, next: NextFunction) {
-    try {
-      validationResult(req).throw();
-      next();
-    } catch (err) {
+    const result = validationResult(req).formatWith<ErrorResponse>(
+      ({ msg, param }) => ({
+        msg,
+        param,
+      })
+    );
+
+    // No error found
+    if (result.isEmpty()) next();
+    // Return error response
+    else
       res.status(400).json({
-        data: { ...err },
+        data: { errors: result.array() },
         message: "Error",
         success: false,
       });
-    }
   }
 
   /**
@@ -50,7 +69,9 @@ class Handler {
   ): any {
     if (err instanceof ApplicationError) {
       return res.status(err.code).json({
-        data: { error: err.toString() },
+        data: {
+          errors: [{ msg: err.toString(), param: "error" }],
+        },
         message: "Something went wrong!",
         success: false,
       });
