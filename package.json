@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node build/index.js",
-    "build": "tsc --project './tsconfig.json'",
-    "dev": "tsc --project './tsconfig.json' --watch & NODE_ENV=development nodemon build",
+    "build": "tsc",
+    "dev": "tsc --watch & NODE_ENV=development nodemon build",
     "lint": "eslint --ext ts src/",
     "lint:fix": "eslint --fix --ext ts src/",
     "prettier": "prettier --check \"src/**/(*.ts)\"",
