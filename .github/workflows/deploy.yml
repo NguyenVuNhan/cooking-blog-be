@@ -33,5 +33,4 @@ jobs:
             mv docker-compose.prod.yml docker-compose.yml
             docker-compose down
             docker-compose build --no-cache
-            rm -rf src
             docker-compose up -d
