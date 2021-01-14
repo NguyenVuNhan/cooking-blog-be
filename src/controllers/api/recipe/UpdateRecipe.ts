@@ -19,25 +19,23 @@ class UpdateRecipe {
     ) => {
       const id = req.params.id;
 
-      // If new title was given, check whether it exist or not
-      if (req.body.title) {
-        const recipe = await Recipe.findOne({ title: req.body.title });
-
-        // Recipe with this name already exists
-        if (recipe) {
-          return next(
-            new ApplicationError(
-              `Recipe with name "${recipe.title}" already exist`
-            )
-          );
-        }
-      }
-
       const recipe = await Recipe.findById(id);
 
       // Check if recipe exist
       if (!recipe) {
         return next(new ApplicationError("No recipe found", 404));
+      }
+
+      // If new title was given, check whether it exist or not
+      if (req.body.title && req.body.title != recipe.title) {
+        const r = await Recipe.findOne({ title: req.body.title });
+
+        // Recipe with this name already exists
+        if (r) {
+          return next(
+            new ApplicationError(`Recipe with name "${r.title}" already exist`)
+          );
+        }
       }
 
       // Check if  current user is the recipe owner
