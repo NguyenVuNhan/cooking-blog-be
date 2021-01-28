@@ -31,6 +31,7 @@ jobs:
           script: |
             cd ${{ secrets.WORK_DIR }}
             mv docker-compose.prod.yml docker-compose.yml
-            docker-compose down
             docker-compose build --no-cache
-            docker-compose up -d
+            docker-compose restart
+            cd ..
+            docker-compose restart
