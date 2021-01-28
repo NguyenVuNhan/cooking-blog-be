@@ -7,12 +7,7 @@ import User from "../../../models/User";
 
 class Login {
   static perform = [
-    body("email")
-      .exists()
-      .withMessage("Email cannot be empty")
-      .bail()
-      .isEmail()
-      .withMessage("Email is invalid"),
+    body("email", "Email or user name is required").exists(),
     body("password").exists().withMessage("Password cannot be empty"),
     Handler.validatorHandler,
     function (req: Request, res: Response, next: NextFunction): void {
@@ -20,7 +15,7 @@ class Login {
       const { email, password } = req.body;
 
       // Check if user exist
-      User.findOne({ email }).then((user) => {
+      User.findOne({ $or: [{ name: email }, { email }] }).then((user) => {
         // User not exist
         if (!user) {
           return next(

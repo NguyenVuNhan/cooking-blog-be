@@ -5,6 +5,7 @@ export interface Tokens {
 }
 
 export interface IUser {
+  name: string;
   email: string;
   password: string;
   passwordResetToken: string;

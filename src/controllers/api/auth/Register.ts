@@ -6,6 +6,7 @@ import User from "../../../models/User";
 
 class Register {
   static perform = [
+    body("name", "User name cannot be empty").exists(),
     body("email")
       .exists()
       .withMessage("Email cannot be empty")
@@ -29,30 +30,34 @@ class Register {
         return true;
       }),
     Handler.validatorHandler,
-    function (req: Request, res: Response, next: NextFunction): void {
+    async (req: Request, res: Response, next: NextFunction) => {
       // Get POST data
-      const { email, password } = req.body;
+      const { name, email, password } = req.body;
 
-      // Check if user exist
-      User.findOne({ email }).then((user) => {
-        // User exist
-        if (user) {
-          return next(new ApplicationError("Email already exists"));
-        }
+      // Check if email already exist
+      let user = await User.findOne({ email });
+      // User exist
+      if (user) {
+        return next(new ApplicationError("Email already exists"));
+      }
+      user = await User.findOne({ name });
+      // User exist
+      if (user) {
+        return next(new ApplicationError("This name already exists"));
+      }
 
-        // User not exist
-        // Save user to database
-        new User({ email, password }).save().then((user) => {
-          // Hide sensitive data
-          user.password = undefined;
-          user.tokens = undefined;
+      // User not exist
+      // Save user to database
+      new User({ name, email, password }).save().then((user) => {
+        // Hide sensitive data
+        user.password = undefined;
+        user.tokens = undefined;
 
-          // Return user
-          return res.status(200).json({
-            data: user,
-            message: "You have been successfully registered",
-            success: true,
-          });
+        // Return user
+        return res.status(200).json({
+          data: user,
+          message: "You have been successfully registered",
+          success: true,
         });
       });
     },
