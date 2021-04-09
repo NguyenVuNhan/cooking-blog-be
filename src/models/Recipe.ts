@@ -18,6 +18,7 @@ export const RecipeSchema = new mongoose.Schema(
         quantity: { type: String },
       },
     ],
+    ingredientsStr: { type: String },
     duration: { type: String, required: true },
     steps: [
       {
@@ -29,6 +30,19 @@ export const RecipeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+  }
+);
+
+RecipeSchema.index(
+  {
+    title: "text",
+    "steps.description": "text",
+    ingredientsStr: "text",
+  },
+  {
+    title: 10,
+    "steps.description": 2,
+    ingredientsStr: 5,
   }
 );
 

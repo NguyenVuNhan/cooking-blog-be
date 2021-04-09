@@ -17,6 +17,7 @@ export interface IRecipe {
   user: IUser;
   course: string;
   ingredients: IIngredientList;
+  ingredientsStr: string;
   duration: number;
   steps: IStep[];
 }

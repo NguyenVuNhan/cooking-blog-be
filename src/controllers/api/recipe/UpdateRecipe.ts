@@ -67,6 +67,9 @@ class UpdateRecipe {
 
         // Run all ingredientPromises
         req.body.ingredients = await Promise.all(ingredientPromises);
+        req.body.ingredientsStr = req.body.ingredients
+          .map((v) => v.ingredient)
+          .join(", ");
       }
 
       const newRecipe = { ...req.body };

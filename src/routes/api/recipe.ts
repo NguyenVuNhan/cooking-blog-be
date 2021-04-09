@@ -4,6 +4,7 @@ import AddRecipeController from "../../controllers/api/recipe/AddRecipe";
 import DeleteRecipeController from "../../controllers/api/recipe/DeleteRecipe";
 import UpdateRecipeController from "../../controllers/api/recipe/UpdateRecipe";
 import ViewRecipeController from "../../controllers/api/recipe/ViewRecipe";
+import SearchRecipeController from "../../controllers/api/recipe/SearchRecipe";
 
 const router = Router();
 const privateRouter = Router();
@@ -35,7 +36,7 @@ privateRouter.use(passport.authenticate("jwt", { session: false }));
  *            description: No recipe found
  */
 privateRouter.post("/", AddRecipeController.perform);
-publicRouter.get("/", ViewRecipeController.perform);
+publicRouter.get("/", SearchRecipeController.perform);
 
 /**
  * @swagger

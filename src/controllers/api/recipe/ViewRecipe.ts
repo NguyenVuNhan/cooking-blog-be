@@ -12,20 +12,15 @@ class ViewRecipe {
       const id = req.params.id;
 
       let recipes = null;
-      if (id) {
-        recipes = await Recipe.findById(id)
-          .populate({
-            path: "ingredients",
-            populate: {
-              path: "ingredient",
-              select: "name",
-            },
-          })
-          .exec();
-      } else {
-        // If id wasn't given, return all recipe
-        recipes = await Recipe.find();
-      }
+      recipes = await Recipe.findById(id)
+        .populate({
+          path: "ingredients",
+          populate: {
+            path: "ingredient",
+            select: "name",
+          },
+        })
+        .exec();
 
       if (!recipes) {
         return next(new ApplicationError("No recipe found", 404));

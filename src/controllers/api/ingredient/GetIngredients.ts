@@ -9,10 +9,10 @@ class GetIngredients {
       let ingredients = (
         await Ingredient.find({
           // $text: { $search: name },
-          name: { $regex: `^${name}` },
+          name: { $regex: name },
         })
           .select("name -_id")
-          .sort("name")
+          .limit(20)
           .exec()
       ).map(({ name }) => name);
 
