@@ -33,7 +33,7 @@ jobs:
             mv docker-compose.prod.yml docker-compose.yml
             docker-compose down
             docker-compose build --no-cache
-            docker-compose restart
+            docker-compose up
             cd ..
             docker-compose down
-            docker-compose restart
+            docker-compose up
